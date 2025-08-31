@@ -29,8 +29,8 @@ and more!!!
 [ Provide a bullet-point list of the app's endpoints (excluding the Auth API) you have successfully implemented. ] e.g.
 
 * GET /movies - Gets all movies
-* GET /movies/(movieId) - Gets the movie based on the provided ID
+* GET /movies/(id) - Gets the movie based on the provided ID
 * POST /movies - Add a new movie
-* DELETE /movies/(movieId) - Delete a movie based on the provided ID
-* PUT /movies/(movieId) - Update parameters of a movie based on the provided ID
+* DELETE /movies/(id) - Delete a movie based on the provided ID
+* PUT /movies/(id) - Update parameters of a movie based on the provided ID
 

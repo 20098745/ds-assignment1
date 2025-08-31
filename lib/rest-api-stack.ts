@@ -4,6 +4,7 @@ import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 import * as custom from "aws-cdk-lib/custom-resources";
 import { Construct } from "constructs";
+import * as iam from 'aws-cdk-lib/aws-iam';
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
 import { generateBatch } from "../shared/util";
 import { movies } from "../seed/movies";
@@ -89,6 +90,26 @@ export class RestAPIStack extends cdk.Stack {
       },
     });
 
+    const translateMovieFn = new lambdanode.NodejsFunction(this, "TranslateMovieFn", {
+      architecture: lambda.Architecture.ARM_64,
+      runtime: lambda.Runtime.NODEJS_16_X,
+      entry: `${__dirname}/../lambdas/translate.ts`,
+      timeout: cdk.Duration.seconds(10),
+      memorySize: 128,
+      environment: {
+        TABLE_NAME: moviesTable.tableName,
+        REGION: "eu-west-1",
+      },
+    });
+
+    translateMovieFn.addToRolePolicy(
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        actions: ["translate:TranslateText"],
+        resources: ["*"]
+      })
+    );
+
     new custom.AwsCustomResource(this, "moviesddbInitData", {
       onCreate: {
         service: "DynamoDB",
@@ -111,6 +132,7 @@ export class RestAPIStack extends cdk.Stack {
     moviesTable.grantReadWriteData(newMovieFn)
     moviesTable.grantWriteData(deleteMovieFn)
     moviesTable.grantWriteData(updateMovieFn)
+    moviesTable.grantReadWriteData(translateMovieFn)
 
     // REST API 
     const api = new apig.RestApi(this, "RestAPI", {
@@ -149,6 +171,12 @@ export class RestAPIStack extends cdk.Stack {
     movieEndpoint.addMethod(
       "PUT",
       new apig.LambdaIntegration(updateMovieFn, { proxy: true })
+    );
+
+    const translateEndpoint = movieEndpoint.addResource("translate");
+    translateEndpoint.addMethod(
+      "GET",
+      new apig.LambdaIntegration(translateMovieFn, { proxy: true })
     );
   }
 }
