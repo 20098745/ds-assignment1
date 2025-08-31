@@ -2,7 +2,7 @@
 
 Name: Daniel Keane
 
-Demo: 
+Demo: https://www.youtube.com/watch?v=sRcf_EA49YM
 
 ## Useful commands
 
@@ -33,4 +33,28 @@ and more!!!
 * POST /movies - Add a new movie
 * DELETE /movies/(id) - Delete a movie based on the provided ID
 * PUT /movies/(id) - Update parameters of a movie based on the provided ID
+* GET /movies/(id)/translate?language=(value) - Takes the overview text of a movie and translates it to the chosen language, then return the full movie details with the translation. 
 
+## Translation 
+
+The lambda function used to translate text for this assignment utilises AWS Translate to translate the overview(description) of the movie chosen to a specified language. The function uses a GET request to fetch the movie info from DynamoDB which it then translate and returns the full movie details with the translation included. 
+
+## Auth API Endpoints
+Auth API Endpoints was not attempted for this assignment
+
+## Relevant Images
+
+Heres my DynamoDB showing the movies table and the movies in it
+![DynamoDB Picture](img/DynamoDBTable.png)
+
+Heres my CloudFormation showing the stacks created by the project
+![CloudFormation Picture](img/CloudFormationStacks.png)
+
+Heres my API Gateway showing the endpoints for the project
+![API Gateway](img/APIGateway.png)
+
+## Sources
+
+For the translation feature I used the official Amazon Translate documentation to aid me in implementation and understanding while I worked on the feature
+
+https://docs.aws.amazon.com/translate/latest/dg/what-is.html
