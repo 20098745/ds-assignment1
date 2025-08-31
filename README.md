@@ -4,6 +4,15 @@ Name: Daniel Keane
 
 Demo: 
 
+## Useful commands
+
+* npm run build compile typescript to js
+* npm run watch watch for changes and compile
+* npm run test perform the jest unit tests
+* cdk deploy deploy this stack to your default AWS account/region
+* cdk diff compare deployed stack with current state
+* cdk synth emits the synthesized CloudFormation template
+
 ## Context
 
 For this assignment I chose to use movie data for my API. This API is designed to create, store, and manage movie information. It contains info such as 
